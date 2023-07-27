@@ -10,22 +10,34 @@ const App = () => {
     user,
     isAuthenticated,
     isLoading,
+    getAccessTokenSilently
   } = useAuth0();
 
   // Wait for the authentication to complete before showing anything
   if (isLoading) {
     return <div>Loading...</div>;
   }
-
-
-
-  function callAPI(){
-     axios.get("http://localhost:4000/").then(response=> console.log(response.data));
+ async function callAPI(){
+    try{
+      const response = await axios.get("http://localhost:4000/");
+    }
+    catch(error){
+      console.log(error)
+    }
   }
-  function callProtectedAPI(){
-     axios
-       .get("http://localhost:4000/protected")
-       .then((response) => console.log(response.data));
+
+  async function callProtectedAPI(){
+    try {
+       const token = await getAccessTokenSilently();
+       const response = await axios.get("http://localhost:4000/protected" , {
+        headers:{
+          Authorization:`Bearer ${token}`
+        }
+       });
+       console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (

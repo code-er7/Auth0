@@ -18,7 +18,7 @@ const jwtCheck = auth({
 
 // enforce on all endpoints
 app.use(jwtCheck);
-
+ 
 //routes
 app.get("/", (req, res) => {
   res.send("hello from index route");
